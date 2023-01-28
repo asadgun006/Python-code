@@ -1,0 +1,44 @@
+import json
+import time
+
+records = []
+
+try:
+    myFile = open("step4_data.json")
+except FileNotFoundError:
+    pass
+else:
+    ds = json.load(myFile)
+    records = ds["records"]
+    myFile.close()
+
+while True:
+    print("""\nForum Comments
+==============
+0: Exit
+1: Display Comments
+2: Add comment""")
+    userInput = input('\nEnter your selection: ')
+    if userInput == '0':
+        print('Done!')
+        break
+    elif userInput == '1':
+        if len(records) == 0:
+            print('\nNothing to display yet!')
+        else:
+            for value in records:
+                print(f'\nName of the user: {value["name"]}, Date of the comment: {value["date"]} \nComment added: '
+                      f'{value["comment"]}')
+                print('-----------------------------')
+    elif userInput == '2':
+        currentTime = time.ctime()
+        userName = input('Enter your name: ')
+        userComment = input('Enter your comment: ')
+        userDictionary = {"date": currentTime, "name": userName, "comment": userComment}
+        records.append(userDictionary)
+        print('\nInformation added.')
+
+myNewFile = open("step4_data.json", "w")
+ds = {"records": records}
+json.dump(ds, myNewFile)
+myNewFile.close()
